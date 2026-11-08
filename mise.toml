@@ -1,0 +1,69 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[tasks.install]
+description = "Installe les dépendances"
+run = "uv sync"
+
+[tasks.start]
+description = "Démarre le serveur sur http://localhost:8000"
+depends = ["install"]
+run = "uv run uvicorn pythonoramix.main:application"
+
+[tasks.dev]
+description = "Démarre le serveur et le recharge à chaque modification"
+depends = ["install"]
+run = "uv run uvicorn pythonoramix.main:application --reload"
+
+[tasks.potion]
+description = "Demande une potion magique au serveur déjà démarré"
+run = "curl --silent --show-error --include --request POST http://localhost:8000/potion-magique"
+
+[tasks.docs]
+description = "Ouvre la documentation de l'API du serveur déjà démarré"
+run = "uv run python -m webbrowser http://localhost:8000/docs"
+
+[tasks.test]
+description = "Lance tous les tests"
+run = "uv run pytest"
+
+[tasks."test:rapide"]
+description = "Lance les tests sans attente réelle du préchauffage"
+run = "uv run pytest tests/domain tests/test_architecture.py"
+
+[tasks."test:domaine"]
+description = "Lance les tests du domaine"
+run = "uv run pytest tests/domain"
+
+[tasks."test:api"]
+description = "Lance les tests de l'API"
+run = "uv run pytest tests/apix"
+
+[tasks."test:infrastructure"]
+description = "Lance les tests de l'infrastructure"
+run = "uv run pytest tests/infrastructure"
+
+[tasks."test:architecture"]
+description = "Lance les tests d'architecture"
+run = "uv run pytest tests/test_architecture.py"
+
+[tasks.lint]
+description = "Vérifie le style du code"
+run = "uv run ruff check ."
+
+[tasks.format]
+description = "Formate le code et corrige ce que ruff sait corriger"
+run = ["uv run ruff check --fix .", "uv run ruff format ."]
+
+[tasks."format:check"]
+description = "Vérifie le formatage sans modifier les fichiers"
+run = "uv run ruff format --check ."
+
+[tasks.typecheck]
+description = "Vérifie les types"
+run = "uv run mypy"
+
+[tasks.check]
+description = "Lance toutes les vérifications"
+depends = ["lint", "format:check", "typecheck", "test"]

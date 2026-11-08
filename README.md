@@ -18,25 +18,42 @@ src/pythonoramix/
 
 ## Lancer l'application
 
+Le projet utilise [mise](https://mise.jdx.dev) pour installer ses outils et lancer ses tasks.
+
 ```bash
-uv run uvicorn pythonoramix.main:application
+mise trust
+mise install
+mise run start
 ```
 
 Dans un autre terminal :
 
 ```bash
-curl -X POST http://localhost:8000/potion-magique
+mise run potion
 ```
 
 La première requête sert la potion magique après 2,7 s de préchauffage. La requête suivante répond 409, car le garde-manger contient de quoi préparer une seule potion.
 
-## Lancer les vérifications
+## Les tasks
 
-```bash
-uv run pytest
-uv run ruff check .
-uv run mypy
-```
+| Task | Rôle |
+|---|---|
+| `mise run install` | Installe les dépendances |
+| `mise run start` | Démarre le serveur sur http://localhost:8000 |
+| `mise run dev` | Démarre le serveur et le recharge à chaque modification |
+| `mise run potion` | Demande une potion magique au serveur déjà démarré |
+| `mise run docs` | Ouvre la documentation de l'API du serveur déjà démarré |
+| `mise run test` | Lance tous les tests |
+| `mise run test:rapide` | Lance les tests sans attente réelle du préchauffage |
+| `mise run test:domaine` | Lance les tests du domaine |
+| `mise run test:api` | Lance les tests de l'API |
+| `mise run test:infrastructure` | Lance les tests de l'infrastructure |
+| `mise run test:architecture` | Lance les tests d'architecture |
+| `mise run lint` | Vérifie le style du code |
+| `mise run format` | Formate le code et corrige ce que ruff sait corriger |
+| `mise run format:check` | Vérifie le formatage sans modifier les fichiers |
+| `mise run typecheck` | Vérifie les types |
+| `mise run check` | Lance toutes les vérifications |
 
 ## Le kata
 
