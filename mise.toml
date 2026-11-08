@@ -60,6 +60,14 @@ run = "uv run ptw . --clear --now"
 description = "Relance les tests rapides à chaque modification"
 run = "uv run ptw . --clear --now tests/domain tests/test_architecture.py"
 
+[tasks.mutation]
+description = "Lance les tests de mutation"
+run = "uv run mutmut run"
+
+[tasks."mutation:resultats"]
+description = "Affiche les mutants qui ont survécu"
+run = "uv run mutmut results"
+
 [tasks.lint]
 description = "Vérifie le style du code"
 run = "uv run ruff check ."
