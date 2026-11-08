@@ -1,8 +1,11 @@
+import time
 from collections.abc import Iterable
 
 from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson
 from pythonoramix.domain.druide.stock import IngrédientManquantException, Stock
-from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Action, Ingrédient, Plat, Recette, Étape
+from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Action, Ingrédient, Plat, Recette, Température, Étape
+
+DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES = 0.05
 
 
 class Pythonoramix:
@@ -13,6 +16,7 @@ class Pythonoramix:
     # @spec druide.preparation::sert-le-resultat-de-la-derniere-etape
     def préparer(self, recette_à_préparer: Recette) -> Plat:
         self._vérifier_disponibilité(recette_à_préparer.ingrédients)
+        self._préchauffer(recette_à_préparer.préchauffage)
 
         dernier_ingrédient_obtenu = INGRÉDIENT_VIDE
         for étape in recette_à_préparer.déroulé:
@@ -26,6 +30,14 @@ class Pythonoramix:
     def _vérifier_disponibilité(self, ingrédients: Iterable[Ingrédient]) -> None:
         if not all(self._stock.vérifier_disponibilité(ingrédient) for ingrédient in ingrédients):
             raise IngrédientManquantException()
+
+    # @spec druide.preparation::prechauffe-avant-les-etapes
+    def _préchauffer(self, température_souhaitée: Température | None) -> None:
+        if température_souhaitée is None:
+            return
+        self._cuiseur.préchauffer(température_souhaitée)
+        while self._cuiseur.vérifier_température().degré < température_souhaitée.degré:
+            time.sleep(DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES)
 
     # @spec druide.preparation::melange-additionne-les-quantites
     def _mélanger(self, étape: Étape) -> Ingrédient:

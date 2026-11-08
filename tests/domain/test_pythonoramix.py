@@ -2,7 +2,7 @@ import pytest
 
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import IngrédientManquantException
-from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Plat
+from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Plat, Température
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from tests.domain.cuiseur_double import CuiseurDouble
 from tests.domain.recettes import (
@@ -142,3 +142,34 @@ def test_préparer_des_fraifles_bouillies_enchaîne_mélange_et_ébullition() ->
     assert plat == Plat(nom="fraifle bouillie", quantité=20)
     assert stock.contenu == []
     assert cuiseur.ingrédient_en_cuisson == INGRÉDIENT_VIDE
+
+
+# @spec druide.preparation::prechauffe-avant-les-etapes
+def test_préparer_des_fraises_bouillies_préchauffe_le_cuiseur_à_la_température_demandée() -> None:
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(GardeManger([fraises(12)]), cuiseur)
+
+    druide.préparer(RECETTE_DES_FRAISES_BOUILLIES)
+
+    assert cuiseur.températures_demandées == [Température(degré=90)]
+
+
+# @spec druide.preparation::prechauffe-avant-les-etapes
+def test_préparer_des_fraifles_sans_préchauffage_ne_sollicite_pas_le_cuiseur() -> None:
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(GardeManger([fraises(12), trèfles(8)]), cuiseur)
+
+    druide.préparer(RECETTE_DES_FRAIFLES)
+
+    assert cuiseur.températures_demandées == []
+
+
+# @spec druide.preparation::refuse-ingredient-manquant-au-depart
+def test_un_ingrédient_manquant_empêche_le_préchauffage() -> None:
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(GardeManger([fraises(12)]), cuiseur)
+
+    with pytest.raises(IngrédientManquantException):
+        druide.préparer(RECETTE_DES_FRAIFLES_BOUILLIES)
+
+    assert cuiseur.températures_demandées == []
