@@ -1,10 +1,10 @@
 from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson
 from pythonoramix.domain.recette import Ingrédient, Température
-from pythonoramix.infrastructure.thermomix import Thermomix
+from pythonoramix.infrastructure import thermomix as infrastructure
 
 
-class ThermomixAdapter(AppareilDeCuisson):
-    def __init__(self, thermomix: Thermomix) -> None:
+class Thermomix(AppareilDeCuisson):
+    def __init__(self, thermomix: infrastructure.Thermomix) -> None:
         self._thermomix = thermomix
 
     def préchauffer(self, température: Température) -> None:

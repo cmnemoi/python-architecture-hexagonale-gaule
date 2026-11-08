@@ -5,13 +5,13 @@ from pythonoramix.domain.druide.stock import IngrédientManquantException
 from pythonoramix.domain.recette import RECETTE_DE_LA_POTION_MAGIQUE, Plat
 
 
-def créer_routeur_potion_magique(druide: Druide) -> APIRouter:
+def créer_le_routeur_de_la_potion_magique(druide: Druide) -> APIRouter:
     routeur = APIRouter()
 
     # @spec api::prepare-la-potion-magique
     # Fonction synchrone : FastAPI l'exécute dans un thread, donc l'attente du préchauffage ne bloque pas le serveur.
     @routeur.post("/potion-magique")
-    def préparer_potion_magique() -> Plat:
+    def préparer_la_potion_magique() -> Plat:
         try:
             return druide.préparer(RECETTE_DE_LA_POTION_MAGIQUE)
         # @spec api::ingredient-manquant-donne-409

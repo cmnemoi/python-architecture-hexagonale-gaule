@@ -1,10 +1,10 @@
 from pythonoramix.domain.druide.stock import Stock
 from pythonoramix.domain.recette import Ingrédient
-from pythonoramix.infrastructure.garde_manger import GardeManger
+from pythonoramix.infrastructure import garde_manger as infrastructure
 
 
-class GardeMangerAdapter(Stock):
-    def __init__(self, garde_manger: GardeManger) -> None:
+class GardeManger(Stock):
+    def __init__(self, garde_manger: infrastructure.GardeManger) -> None:
         self._garde_manger = garde_manger
 
     def vérifier_disponibilité(self, ingrédient_recherché: Ingrédient) -> bool:

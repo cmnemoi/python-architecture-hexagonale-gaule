@@ -1,18 +1,18 @@
 from fastapi.testclient import TestClient
 
-from pythonoramix.config import POISSONS_FRAIS, créer_application, créer_garde_manger
+from pythonoramix.config import POISSONS_FRAIS, créer_l_application, créer_le_garde_manger
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from pythonoramix.infrastructure.thermomix import Thermomix
 from pythonoramix.main import application
 
 
-def _client(garde_manger: GardeManger) -> TestClient:
-    return TestClient(créer_application(garde_manger, Thermomix(durée_d_un_palier_en_secondes=0.001)))
+def _créer_le_client(garde_manger: GardeManger) -> TestClient:
+    return TestClient(créer_l_application(garde_manger, Thermomix(durée_d_un_palier_en_secondes=0.001)))
 
 
 # @spec api::prepare-la-potion-magique
 def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
-    client = _client(créer_garde_manger())
+    client = _créer_le_client(créer_le_garde_manger())
 
     réponse = client.post("/potion-magique")
 
@@ -22,7 +22,7 @@ def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
 
 # @spec api::ingredient-manquant-donne-409
 def test_un_garde_manger_vide_donne_une_erreur_409_avec_le_motif() -> None:
-    client = _client(GardeManger([]))
+    client = _créer_le_client(GardeManger([]))
 
     réponse = client.post("/potion-magique")
 
@@ -32,8 +32,8 @@ def test_un_garde_manger_vide_donne_une_erreur_409_avec_le_motif() -> None:
 
 # @spec api::une-seule-potion-par-demarrage
 def test_une_seconde_potion_donne_une_erreur_409_et_laisse_les_poissons() -> None:
-    garde_manger = créer_garde_manger()
-    client = _client(garde_manger)
+    garde_manger = créer_le_garde_manger()
+    client = _créer_le_client(garde_manger)
     client.post("/potion-magique")
 
     réponse = client.post("/potion-magique")
