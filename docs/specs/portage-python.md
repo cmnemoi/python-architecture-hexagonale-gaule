@@ -17,8 +17,7 @@ Ce portage est le point de départ du kata : il ne contient aucune notification.
 - Le dépôt Java, branche `main`, est la référence, sauf décision écrite dans cette spec. Le dépôt .NET sert uniquement de complément.
 - La branche `main` reste le point de départ. Les participants ajoutent le barde en direct pendant le kata.
 - Le vocabulaire reste celui du kata, en français et avec les accents (`préparer`, `Étape`).
-- Les trois zones du kata restent distinctes : domaine, adaptateurs, infrastructure.
-- L'infrastructure ignore le domaine et garde son propre vocabulaire. Les adaptateurs traduisent entre les deux, contrairement à la version Java.
+- Le code a deux zones, comme la version .NET : le domaine et l'infrastructure. L'infrastructure implémente directement les ports du domaine.
 - Les tests du domaine n'attendent pas le préchauffage réel. Leur cuiseur garde toutefois le refus de cuire hors température.
 
 ## Example mapping
@@ -171,9 +170,9 @@ Si la température actuelle diffère de la température demandée, la cuisson é
 
 | ZOMBIES | Étant donné | Quand | Alors | Origine |
 |---|---|---|---|---|
-| Exceptional | un Thermomix en préchauffage | le druide cuit | `CuiseurNonPréchaufféException` | Code Java `Thermomix.cuire`. Décision : l'appareil lève sa propre erreur et l'adaptateur la traduit |
+| Exceptional | un Thermomix en préchauffage | le druide cuit | `CuiseurNonPréchaufféException` | Code Java `Thermomix.cuire`. |
 | Simple | un Thermomix à la température demandée | le druide cuit puis prélève | le résultat sort avec son nouveau nom et la même quantité | Code Java `Thermomix.cuire` et `Thermomix.prélever` |
-| Zero | un Thermomix déjà prélevé | le druide prélève encore | il reçoit l'ingrédient vide | Code Java `Thermomix.prélever`. Décision : l'appareil rend `None` et l'adaptateur le traduit |
+| Zero | un Thermomix déjà prélevé | le druide prélève encore | il reçoit l'ingrédient vide | Code Java `Thermomix.prélever`. |
 
 ### Règle 12 : la recette de la potion magique reste celle du kata
 
@@ -237,33 +236,24 @@ Le domaine importe uniquement le domaine et la bibliothèque standard.
 
 L'API importe uniquement le domaine, FastAPI et la bibliothèque standard.
 
-`{#architecture::adaptateurs-relient-domaine-et-infrastructure}`
+`{#architecture::infrastructure-implemente-les-ports}`
 
-Les adaptateurs importent uniquement le domaine, l'infrastructure et la bibliothèque standard.
-
-`{#architecture::infrastructure-ignore-le-domaine}`
-
-L'infrastructure importe uniquement l'infrastructure et la bibliothèque standard.
+L'infrastructure importe uniquement le domaine et la bibliothèque standard.
 
 | ZOMBIES | Étant donné | Quand | Alors | Origine |
 |---|---|---|---|---|
 | Interface | un module du domaine qui importe l'infrastructure | les tests d'architecture tournent | ils échouent | Test Java `domainNeDoitDépendreQueDuDomain` |
 | Interface | un module du domaine qui importe FastAPI | les tests d'architecture tournent | ils échouent | Test Java `domainNeDoitPasUtiliserSpring`, transposé à FastAPI |
 | Interface | un module de l'API qui importe l'infrastructure | les tests d'architecture tournent | ils échouent | Test Java `apixNeDoitUtiliserQueDomainOuSpring`, transposé à FastAPI |
-| Interface | un module d'adaptateur qui importe l'API | les tests d'architecture tournent | ils échouent | Test Java `adaptersDoitDependreDeDomainInfrastructureEtSpring` |
-| Interface | un module de l'infrastructure qui importe le domaine | les tests d'architecture tournent | ils échouent | Décision : la version Java autorise cet import |
+| Interface | un module de l'infrastructure qui importe l'API | les tests d'architecture tournent | ils échouent | Test Java `adaptersDoitDependreDeDomainInfrastructureEtSpring`, transposé à l'infrastructure |
 
 Chaque règle d'architecture doit devenir rouge une fois sur un import interdit ajouté à la main.
 
-### Règle 17 : les adaptateurs traduisent entre le domaine et l'infrastructure
+### Règle 17 : le garde-manger en mémoire respecte le port du stock
 
-`{#adaptateurs::traduisent-le-garde-manger}`
+`{#infrastructure::garde-manger-respecte-le-stock}`
 
-Le stock parle en ingrédients. Le garde-manger parle en noms et en quantités, avec sa propre erreur.
-
-`{#adaptateurs::traduisent-le-thermomix}`
-
-Le cuiseur parle en températures et en ingrédients. Le Thermomix parle en degrés et en contenu de bol, avec sa propre erreur.
+Le garde-manger en mémoire implémente directement le port `Stock`.
 
 | ZOMBIES | Étant donné | Quand | Alors | Origine |
 |---|---|---|---|---|
@@ -272,9 +262,8 @@ Le cuiseur parle en températures et en ingrédients. Le Thermomix parle en degr
 | Zero | un stock vide | le druide récupère l'ingrédient vide | il ne reçoit rien | Code Java `GardeManger.vérifierDisponibilité` : un nom absent n'est jamais disponible, même en quantité 0 |
 | Simple | 13 fraises | le druide récupère 12 fraises | il reçoit 12 fraises et il en reste 1 | Code Java `GardeManger.récupérerIngrédient` |
 | Boundary | 12 fraises | le druide récupère 12 fraises | le nom `fraise` n'est plus dans le stock | Code Java `GardeManger.récupérerIngrédient` |
-| Exceptional | 11 fraises | le druide récupère 12 fraises | il ne reçoit rien et les 11 fraises restent | Code Java `GardeManger.récupérerIngrédient`. Décision : l'erreur de l'appareil devient une absence |
+| Exceptional | 11 fraises | le druide récupère 12 fraises | il ne reçoit rien et les 11 fraises restent | Code Java `GardeManger.récupérerIngrédient` |
 | Many | 2 fraises en stock | le druide stocke 3 fraises | le stock contient 5 fraises | Décision : le garde-manger fusionne les quantités |
-| Simple | un Thermomix à 90 °C | le druide lit la température | il reçoit `Température(degré=90)` | Décision : l'appareil parle en degrés |
 
 ## Out of scope
 
