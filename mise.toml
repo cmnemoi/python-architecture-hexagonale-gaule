@@ -28,6 +28,10 @@ run = "uv run python -m webbrowser http://localhost:8000/docs"
 description = "Lance tous les tests"
 run = "uv run pytest"
 
+[tasks."test:couverture"]
+description = "Lance tous les tests et écrit la couverture dans coverage.xml"
+run = "uv run pytest --cov=pythonoramix --cov-report=term-missing --cov-report=xml"
+
 [tasks."test:rapide"]
 description = "Lance les tests sans attente réelle du préchauffage"
 run = "uv run pytest tests/domain tests/test_architecture.py"

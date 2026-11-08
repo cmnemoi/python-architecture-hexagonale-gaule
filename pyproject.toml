@@ -39,6 +39,7 @@ dev = [
     "httpx2>=2.16.0",
     "mypy>=2.4.1",
     "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
     "pytest-watcher>=0.6.3",
     "pytestarch>=5.1.0",
     "ruff>=0.17.4",

@@ -43,4 +43,9 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked
       - name: Run tests with pytest
-        run: mise run test
+        run: mise run test:couverture
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}

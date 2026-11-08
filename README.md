@@ -43,6 +43,7 @@ La première requête sert la potion magique après 2,7 s de préchauffage. La r
 | `mise run potion` | Demande une potion magique au serveur déjà démarré |
 | `mise run docs` | Ouvre la documentation de l'API du serveur déjà démarré |
 | `mise run test` | Lance tous les tests |
+| `mise run test:couverture` | Lance tous les tests et écrit la couverture dans `coverage.xml` |
 | `mise run test:rapide` | Lance les tests sans attente réelle du préchauffage |
 | `mise run test:domaine` | Lance les tests du domaine |
 | `mise run test:api` | Lance les tests de l'API |
