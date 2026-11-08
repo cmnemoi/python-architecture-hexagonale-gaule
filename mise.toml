@@ -48,6 +48,14 @@ run = "uv run pytest tests/infrastructure"
 description = "Lance les tests d'architecture"
 run = "uv run pytest tests/test_architecture.py"
 
+[tasks."test:watch"]
+description = "Relance tous les tests à chaque modification"
+run = "uv run ptw . --clear --now"
+
+[tasks."test:watch:rapide"]
+description = "Relance les tests rapides à chaque modification"
+run = "uv run ptw . --clear --now tests/domain tests/test_architecture.py"
+
 [tasks.lint]
 description = "Vérifie le style du code"
 run = "uv run ruff check ."

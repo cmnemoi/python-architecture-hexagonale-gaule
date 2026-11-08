@@ -48,6 +48,8 @@ La première requête sert la potion magique après 2,7 s de préchauffage. La r
 | `mise run test:api` | Lance les tests de l'API |
 | `mise run test:infrastructure` | Lance les tests de l'infrastructure |
 | `mise run test:architecture` | Lance les tests d'architecture |
+| `mise run test:watch` | Relance tous les tests à chaque modification |
+| `mise run test:watch:rapide` | Relance les tests rapides à chaque modification |
 | `mise run lint` | Vérifie le style du code |
 | `mise run format` | Formate le code et corrige ce que ruff sait corriger |
 | `mise run format:check` | Vérifie le formatage sans modifier les fichiers |
