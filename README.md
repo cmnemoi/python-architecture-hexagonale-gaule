@@ -47,6 +47,7 @@ La première requête sert la potion magique après 2,7 s de préchauffage. La r
 | `mise run test:rapide` | Lance les tests sans attente réelle du préchauffage |
 | `mise run test:domaine` | Lance les tests du domaine |
 | `mise run test:api` | Lance les tests de l'API |
+| `mise run test:adaptateurs` | Lance les tests des adaptateurs |
 | `mise run test:infrastructure` | Lance les tests de l'infrastructure |
 | `mise run test:architecture` | Lance les tests d'architecture |
 | `mise run lint` | Vérifie le style du code |
