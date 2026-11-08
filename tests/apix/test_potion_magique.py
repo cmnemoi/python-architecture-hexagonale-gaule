@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi.testclient import TestClient
 
 from pythonoramix.config import POISSONS_FRAIS, créer_l_application, créer_le_garde_manger
@@ -16,7 +18,7 @@ def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
 
     réponse = client.post("/potion-magique")
 
-    assert réponse.status_code == 200
+    assert réponse.status_code == HTTPStatus.OK
     assert réponse.json() == {"nom": "potion magique", "quantité": 35}
 
 
@@ -26,7 +28,7 @@ def test_un_garde_manger_vide_donne_une_erreur_409_avec_le_motif() -> None:
 
     réponse = client.post("/potion-magique")
 
-    assert réponse.status_code == 409
+    assert réponse.status_code == HTTPStatus.CONFLICT
     assert réponse.json() == {"detail": "Un ingrédient est manquant pour la recette."}
 
 
@@ -38,7 +40,7 @@ def test_une_seconde_potion_donne_une_erreur_409_et_laisse_les_poissons() -> Non
 
     réponse = client.post("/potion-magique")
 
-    assert réponse.status_code == 409
+    assert réponse.status_code == HTTPStatus.CONFLICT
     assert garde_manger.contenu == [POISSONS_FRAIS]
 
 
@@ -46,4 +48,4 @@ def test_une_seconde_potion_donne_une_erreur_409_et_laisse_les_poissons() -> Non
 def test_l_application_de_production_est_câblée_avec_le_vrai_thermomix() -> None:
     réponse = TestClient(application).post("/potion-magique")
 
-    assert réponse.status_code == 200
+    assert réponse.status_code == HTTPStatus.OK

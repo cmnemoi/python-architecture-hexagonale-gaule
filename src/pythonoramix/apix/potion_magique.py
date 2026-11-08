@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
+from http import HTTPStatus
+
+from fastapi import APIRouter, HTTPException
 
 from pythonoramix.domain.druide.druide import Druide
 from pythonoramix.domain.druide.stock import IngrédientManquantException
@@ -16,6 +18,6 @@ def créer_le_routeur_de_la_potion_magique(druide: Druide) -> APIRouter:
             return druide.préparer(RECETTE_DE_LA_POTION_MAGIQUE)
         # @spec api::ingredient-manquant-donne-409
         except IngrédientManquantException as ingrédient_manquant:
-            raise HTTPException(status.HTTP_409_CONFLICT, detail=str(ingrédient_manquant)) from ingrédient_manquant
+            raise HTTPException(HTTPStatus.CONFLICT, detail=str(ingrédient_manquant)) from ingrédient_manquant
 
     return routeur
