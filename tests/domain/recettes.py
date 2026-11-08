@@ -98,6 +98,23 @@ def recette_sans_étape() -> Recette:
     return Recette(nom="Recette sans étape", ingrédients=(), préchauffage=None, déroulé=())
 
 
+def recette_d_un_mélange_sans_second_ingrédient() -> Recette:
+    return Recette(
+        nom="Recette invalide",
+        ingrédients=(fraises(12),),
+        préchauffage=None,
+        déroulé=(
+            Étape(
+                nom="Mélanger les fraises avec rien",
+                base=fraises(12),
+                avec=None,
+                action=Action.MÉLANGER,
+                nom_ingrédient_obtenu="fraise seule",
+            ),
+        ),
+    )
+
+
 def trèfles(quantité: int) -> Ingrédient:
     return Ingrédient(nom="trèfle à 4 feuilles", quantité=quantité)
 

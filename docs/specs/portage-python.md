@@ -265,11 +265,21 @@ Le garde-manger en mémoire implémente directement le port `Stock`.
 | Exceptional | 11 fraises | le druide récupère 12 fraises | il ne reçoit rien et les 11 fraises restent | Code Java `GardeManger.récupérerIngrédient` |
 | Many | 2 fraises en stock | le druide stocke 3 fraises | le stock contient 5 fraises | Décision : le garde-manger fusionne les quantités |
 
+### Règle 18 : un mélange sans second ingrédient est une recette invalide
+
+`{#druide.preparation::refuse-melange-sans-second-ingredient}`
+
+Une étape de mélange doit nommer ses deux ingrédients. Sinon, la préparation échoue avec `ValueError`, et le stock garde l'ingrédient de base de cette étape.
+
+| ZOMBIES | Étant donné | Quand | Alors | Origine |
+|---|---|---|---|---|
+| Exceptional | 12 fraises et une étape de mélange sans second ingrédient | le druide prépare cette recette | `ValueError`, et les 12 fraises restent | Code Java `étape.avec().orElseThrow()`. Message : code .NET `Melanger`. Décision : le type d'erreur suit Python |
+
 ## Out of scope
 
 - Toute notification : les participants l'ajoutent en direct pendant le kata.
 - La persistance : le garde-manger reste en mémoire et se remplit à chaque démarrage.
 - Les requêtes simultanées : aucune protection du stock partagé. Le résultat de deux préparations simultanées reste indéfini.
 - Les températures qui ne sont pas des multiples de 10 °C : le Thermomix dépasse la cible, puis refuse de cuire, comme en Java.
-- La validation des recettes, par exemple un mélange sans second ingrédient : les recettes sont écrites dans le code.
+- Les autres validations de recette : les recettes sont écrites dans le code.
 - Le garde-manger vide à chaque requête de la version .NET : le garde-manger reste unique, comme en Java.

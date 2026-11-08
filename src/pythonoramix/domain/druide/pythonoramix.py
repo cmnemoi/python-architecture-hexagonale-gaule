@@ -39,6 +39,7 @@ class Pythonoramix(Druide):
             time.sleep(DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES)
 
     # @spec druide.preparation::melange-additionne-les-quantites
+    # @spec druide.preparation::refuse-melange-sans-second-ingredient
     # @spec druide.preparation::echoue-sans-restitution-en-cours-de-recette
     def _mélanger(self, étape: Étape) -> Ingrédient:
         if étape.avec is None:

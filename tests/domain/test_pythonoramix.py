@@ -11,6 +11,7 @@ from tests.domain.recettes import (
     fraises,
     gui,
     lait_de_sanglier,
+    recette_d_un_mélange_sans_second_ingrédient,
     recette_des_fraifles,
     recette_des_fraifles_au_gui,
     recette_des_fraifles_au_gui_et_lait_doré,
@@ -116,6 +117,17 @@ def test_préparer_une_recette_sans_étape_échoue() -> None:
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(recette_sans_étape())
+
+
+# @spec druide.preparation::refuse-melange-sans-second-ingredient
+def test_un_mélange_sans_second_ingrédient_échoue_et_laisse_le_stock_intact() -> None:
+    stock = GardeManger([fraises(12)])
+    druide = Pythonoramix(stock, CuiseurDouble())
+
+    with pytest.raises(ValueError, match="Une étape de mélange doit avoir un ingrédient associé."):
+        druide.préparer(recette_d_un_mélange_sans_second_ingrédient())
+
+    assert stock.contenu == [fraises(12)]
 
 
 # @spec druide.preparation::ebullition-conserve-la-quantite
