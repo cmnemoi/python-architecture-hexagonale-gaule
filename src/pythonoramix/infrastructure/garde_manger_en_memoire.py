@@ -3,7 +3,7 @@ from pythonoramix.domain.recette import Ingrédient
 
 
 # @spec infrastructure::garde-manger-respecte-le-stock
-class GardeMangerEnMémoire(Stock):
+class GardeManger(Stock):
     def __init__(self, ingrédients: list[Ingrédient]) -> None:
         self._quantités = {ingrédient.nom: ingrédient.quantité for ingrédient in ingrédients}
 

@@ -5,7 +5,7 @@ from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import Stock
 from pythonoramix.domain.recette import RECETTE_DE_LA_POTION_MAGIQUE, Ingrédient
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeMangerEnMémoire
+from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
 
 
 def créer_l_application(stock: Stock, cuiseur: AppareilDeCuisson) -> FastAPI:
@@ -15,8 +15,8 @@ def créer_l_application(stock: Stock, cuiseur: AppareilDeCuisson) -> FastAPI:
 
 
 # @spec api::une-seule-potion-par-demarrage
-def créer_le_garde_manger() -> GardeMangerEnMémoire:
-    return GardeMangerEnMémoire([POISSONS_FRAIS, *RECETTE_DE_LA_POTION_MAGIQUE.ingrédients])
+def créer_le_garde_manger() -> GardeManger:
+    return GardeManger([POISSONS_FRAIS, *RECETTE_DE_LA_POTION_MAGIQUE.ingrédients])
 
 
 POISSONS_FRAIS = Ingrédient(nom="poisson frais arrivant de Lutèce par char à bœufs", quantité=100)

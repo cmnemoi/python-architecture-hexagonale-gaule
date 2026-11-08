@@ -3,8 +3,8 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 
 from pythonoramix.config import POISSONS_FRAIS, créer_l_application, créer_le_garde_manger
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeMangerEnMémoire
-from pythonoramix.infrastructure.thermomix_en_memoire import ThermomixEnMémoire
+from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
+from pythonoramix.infrastructure.thermomix_en_memoire import Thermomix
 from pythonoramix.main import application
 
 
@@ -20,7 +20,7 @@ def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
 
 # @spec api::ingredient-manquant-donne-409
 def test_un_garde_manger_vide_donne_une_erreur_409_avec_le_motif() -> None:
-    client = _créer_le_client(GardeMangerEnMémoire([]))
+    client = _créer_le_client(GardeManger([]))
 
     réponse = client.post("/potion-magique")
 
@@ -47,5 +47,5 @@ def test_l_application_de_production_est_câblée_avec_le_vrai_thermomix() -> No
     assert réponse.status_code == HTTPStatus.OK
 
 
-def _créer_le_client(garde_manger: GardeMangerEnMémoire) -> TestClient:
-    return TestClient(créer_l_application(garde_manger, ThermomixEnMémoire(durée_d_un_palier_en_secondes=0.001)))
+def _créer_le_client(garde_manger: GardeManger) -> TestClient:
+    return TestClient(créer_l_application(garde_manger, Thermomix(durée_d_un_palier_en_secondes=0.001)))

@@ -5,7 +5,7 @@ from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson, CuiseurNonPré
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient, Température
 
 
-class ThermomixEnMémoire(AppareilDeCuisson):
+class Thermomix(AppareilDeCuisson):
     def __init__(self, durée_d_un_palier_en_secondes: float = 0.3) -> None:
         self._durée_d_un_palier_en_secondes = durée_d_un_palier_en_secondes
         self._ingrédient_en_cuisson = INGRÉDIENT_VIDE
