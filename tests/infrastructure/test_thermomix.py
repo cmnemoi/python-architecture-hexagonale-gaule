@@ -24,8 +24,21 @@ def test_préchauffer_atteint_90_degrés_en_2_secondes_7_sans_les_dépasser() ->
     thermomix.préchauffer(_90_DEGRÉS)
     _attendre_les_90_degrés(thermomix)
 
-    assert time.monotonic() - début >= 2.7
+    assert 2.7 <= time.monotonic() - début < _LIMITE_HAUTE_DE_CHAUFFE_EN_SECONDES
     time.sleep(0.4)
+    assert thermomix.vérifier_température() == _90_DEGRÉS
+
+
+# @spec cuiseur.thermomix::chauffe-progressivement
+def test_deux_préchauffages_ne_dépassent_pas_la_température_demandée() -> None:
+    thermomix = Thermomix(durée_d_un_palier_en_secondes=0.01)
+
+    thermomix.préchauffer(_90_DEGRÉS)
+    thermomix.préchauffer(_90_DEGRÉS)
+    while thermomix.vérifier_température().degré < _90_DEGRÉS.degré:
+        time.sleep(0.01)
+    time.sleep(0.05)
+
     assert thermomix.vérifier_température() == _90_DEGRÉS
 
 
@@ -49,6 +62,19 @@ def test_prélever_après_cuisson_sort_le_résultat_puis_laisse_le_cuiseur_vide(
     assert thermomix.prélever() == INGRÉDIENT_VIDE
 
 
+# @spec cuiseur.thermomix::refuse-cuisson-hors-temperature
+def test_un_thermomix_neuf_sans_préchauffage_accepte_de_cuire() -> None:
+    thermomix = Thermomix()
+
+    thermomix.cuire(_FRAISES, "fraise bouillie")
+
+    assert thermomix.prélever() == Ingrédient(nom="fraise bouillie", quantité=12)
+
+
+def test_un_thermomix_neuf_rend_l_ingrédient_vide() -> None:
+    assert Thermomix().prélever() == INGRÉDIENT_VIDE
+
+
 def _attendre_les_90_degrés(thermomix: Thermomix) -> None:
     while thermomix.vérifier_température() != _90_DEGRÉS:
         time.sleep(0.01)
@@ -56,3 +82,4 @@ def _attendre_les_90_degrés(thermomix: Thermomix) -> None:
 
 _90_DEGRÉS = Température(degré=90)
 _FRAISES = Ingrédient(nom="fraise", quantité=12)
+_LIMITE_HAUTE_DE_CHAUFFE_EN_SECONDES = 5

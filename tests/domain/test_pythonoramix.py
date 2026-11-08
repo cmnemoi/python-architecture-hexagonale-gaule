@@ -124,9 +124,10 @@ def test_un_mélange_sans_second_ingrédient_échoue_et_laisse_le_stock_intact()
     stock = GardeManger([fraises(12)])
     druide = Pythonoramix(stock, CuiseurDouble())
 
-    with pytest.raises(ValueError, match="Une étape de mélange doit avoir un ingrédient associé."):
+    with pytest.raises(ValueError) as erreur:
         druide.préparer(recette_d_un_mélange_sans_second_ingrédient())
 
+    assert str(erreur.value) == "Une étape de mélange doit avoir un ingrédient associé."
     assert stock.contenu == [fraises(12)]
 
 

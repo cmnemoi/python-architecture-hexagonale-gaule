@@ -161,6 +161,7 @@ Il atteint 90 °C en 2,7 s.
 |---|---|---|---|---|
 | Simple | un Thermomix à 0 °C | la chauffe à 90 °C vient de démarrer | la température reste sous 90 °C | Code Java `Thermomix.préchauffer` |
 | Boundary | un Thermomix en préchauffage vers 90 °C | 2,7 s sont passées | la température est 90 °C et ne dépasse pas cette valeur | Code Java `Thermomix.préchauffer` |
+| Many | un Thermomix qui reçoit deux demandes de préchauffage à 90 °C | la chauffe se termine | la température est 90 °C et ne dépasse pas cette valeur | Code Java `Thermomix` : un seul fil d'exécution chauffe |
 
 ### Règle 11 : le Thermomix refuse de cuire hors température
 
@@ -173,6 +174,8 @@ Si la température actuelle diffère de la température demandée, la cuisson é
 | Exceptional | un Thermomix en préchauffage | le druide cuit | `CuiseurNonPréchaufféException` | Code Java `Thermomix.cuire`. |
 | Simple | un Thermomix à la température demandée | le druide cuit puis prélève | le résultat sort avec son nouveau nom et la même quantité | Code Java `Thermomix.cuire` et `Thermomix.prélever` |
 | Zero | un Thermomix déjà prélevé | le druide prélève encore | il reçoit l'ingrédient vide | Code Java `Thermomix.prélever`. |
+| Zero | un Thermomix neuf | le druide prélève | il reçoit l'ingrédient vide | Code Java `Thermomix.ingrédientEnCuisson` |
+| Zero | un Thermomix neuf, sans préchauffage | le druide cuit | le résultat sort, car la température actuelle égale la température demandée | Code Java `Thermomix.cuire` |
 
 ### Règle 12 : la recette de la potion magique reste celle du kata
 
