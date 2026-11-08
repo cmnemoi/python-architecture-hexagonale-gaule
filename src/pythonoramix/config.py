@@ -9,7 +9,7 @@ from pythonoramix.infrastructure.garde_manger import GardeManger
 
 
 def créer_l_application(stock: Stock, cuiseur: AppareilDeCuisson) -> FastAPI:
-    application = FastAPI(title="Pythonoramix")
+    application = FastAPI()
     application.include_router(créer_le_routeur_de_la_potion_magique(Pythonoramix(stock, cuiseur)))
     return application
 
