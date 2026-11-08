@@ -1,5 +1,8 @@
 # Pythonoramix
 
+[![Continuous Integration](https://github.com/cmnemoi/python-architecture-hexagonale-gaule/actions/workflows/continuous_integration.yaml/badge.svg)](https://github.com/cmnemoi/python-architecture-hexagonale-gaule/actions/workflows/continuous_integration.yaml)
+[![codecov](https://codecov.io/gh/cmnemoi/python-architecture-hexagonale-gaule/graph/badge.svg)](https://codecov.io/gh/cmnemoi/python-architecture-hexagonale-gaule)
+
 Version Python et FastAPI du kata d'architecture hexagonale au pays des irréductibles développeurs.
 
 Le kata reprend [Javanoramix](https://github.com/ambreperson/java-architecture-hexagonale-gaule) et [Dotnetoramix](https://github.com/swcraftLille/ArchihexaEnGaule).
