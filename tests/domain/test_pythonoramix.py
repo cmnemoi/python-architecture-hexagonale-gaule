@@ -2,7 +2,7 @@ import pytest
 
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import IngrédientManquantException
-from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Plat, Température
+from pythonoramix.domain.recette import INGRÉDIENT_VIDE, RECETTE_DE_LA_POTION_MAGIQUE, Plat, Température
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from tests.domain.cuiseur_double import CuiseurDouble
 from tests.domain.recettes import (
@@ -173,3 +173,29 @@ def test_un_ingrédient_manquant_empêche_le_préchauffage() -> None:
         druide.préparer(RECETTE_DES_FRAIFLES_BOUILLIES)
 
     assert cuiseur.températures_demandées == []
+
+
+def _stock_de_potion_magique() -> GardeManger:
+    return GardeManger([trèfles(8), fraises(12), lait_de_sanglier(4), curcuma(10), gui(1)])
+
+
+# @spec recette::potion-magique
+def test_préparer_la_potion_magique_sert_35_potions_et_vide_le_stock_et_le_cuiseur() -> None:
+    stock = _stock_de_potion_magique()
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(stock, cuiseur)
+
+    plat = druide.préparer(RECETTE_DE_LA_POTION_MAGIQUE)
+
+    assert plat == Plat(nom="potion magique", quantité=35)
+    assert stock.contenu == []
+    assert cuiseur.ingrédient_en_cuisson == INGRÉDIENT_VIDE
+
+
+# @spec druide.preparation::reste-silencieuse
+def test_préparer_la_potion_magique_n_écrit_rien_sur_la_sortie_standard(capsys: pytest.CaptureFixture[str]) -> None:
+    druide = Pythonoramix(_stock_de_potion_magique(), CuiseurDouble())
+
+    druide.préparer(RECETTE_DE_LA_POTION_MAGIQUE)
+
+    assert capsys.readouterr().out == ""
