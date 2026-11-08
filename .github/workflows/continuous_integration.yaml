@@ -1,0 +1,46 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Install tools with mise
+        uses: jdx/mise-action@v5
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Check code format with Ruff
+        run: mise run format:check
+      - name: Lint code with Ruff
+        run: mise run lint
+      - name: Check types with Mypy
+        run: mise run typecheck
+
+  test:
+    name: Tests
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Install tools with mise
+        uses: jdx/mise-action@v5
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Run tests with pytest
+        run: mise run test
