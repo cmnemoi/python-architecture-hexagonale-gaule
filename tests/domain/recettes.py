@@ -1,4 +1,4 @@
-from pythonoramix.domain.recette import Action, Ingrédient, Recette, Étape
+from pythonoramix.domain.recette import Action, Ingrédient, Recette, Température, Étape
 
 
 def trèfles(quantité: int) -> Ingrédient:
@@ -104,6 +104,37 @@ RECETTE_DES_FRAIFLES_AU_GUI_ET_LAIT_DORÉ = Recette(
             avec=lait_doré(14),
             action=Action.MÉLANGER,
             nom_ingrédient_obtenu="fraifle au gui et lait doré",
+        ),
+    ),
+)
+
+RECETTE_DES_FRAISES_BOUILLIES = Recette(
+    nom="Recette des fraises bouillies",
+    ingrédients=(fraises(12),),
+    préchauffage=Température(degré=90),
+    déroulé=(
+        Étape(
+            nom="Faire bouillir les fraises",
+            base=fraises(12),
+            avec=None,
+            action=Action.BOUILLIR,
+            nom_ingrédient_obtenu="fraise bouillie",
+        ),
+    ),
+)
+
+RECETTE_DES_FRAIFLES_BOUILLIES = Recette(
+    nom="Recette des fraifles bouillies",
+    ingrédients=(trèfles(8), fraises(12)),
+    préchauffage=Température(degré=90),
+    déroulé=(
+        _MÉLANGER_LES_TRÈFLES_ET_LES_FRAISES,
+        Étape(
+            nom="Faire bouillir les fraifles",
+            base=fraifles(20),
+            avec=None,
+            action=Action.BOUILLIR,
+            nom_ingrédient_obtenu="fraifle bouillie",
         ),
     ),
 )

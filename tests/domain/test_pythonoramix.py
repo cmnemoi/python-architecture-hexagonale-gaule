@@ -2,14 +2,17 @@ import pytest
 
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import IngrédientManquantException
-from pythonoramix.domain.recette import Plat
+from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Plat
 from pythonoramix.infrastructure.garde_manger import GardeManger
+from tests.domain.cuiseur_double import CuiseurDouble
 from tests.domain.recettes import (
     RECETTE_DES_FRAIFLES,
     RECETTE_DES_FRAIFLES_AU_GUI,
     RECETTE_DES_FRAIFLES_AU_GUI_ET_LAIT_DORÉ,
     RECETTE_DES_FRAIFLES_AU_GUI_PAS_ASSEZ_DE_FRAIFLES,
     RECETTE_DES_FRAIFLES_AU_GUI_PAS_ASSEZ_DE_GUI,
+    RECETTE_DES_FRAIFLES_BOUILLIES,
+    RECETTE_DES_FRAISES_BOUILLIES,
     RECETTE_SANS_ÉTAPE,
     curcuma,
     fraifles,
@@ -23,7 +26,7 @@ from tests.domain.recettes import (
 # @spec druide.preparation::sert-le-resultat-de-la-derniere-etape
 def test_préparer_des_fraifles_sert_le_résultat_et_vide_le_stock() -> None:
     stock = GardeManger([fraises(12), trèfles(8)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     plat = druide.préparer(RECETTE_DES_FRAIFLES)
 
@@ -34,7 +37,7 @@ def test_préparer_des_fraifles_sert_le_résultat_et_vide_le_stock() -> None:
 # @spec druide.preparation::refuse-ingredient-manquant-au-depart
 def test_préparer_sans_trèfle_échoue_et_laisse_le_stock_intact() -> None:
     stock = GardeManger([fraises(12)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(RECETTE_DES_FRAIFLES)
@@ -45,7 +48,7 @@ def test_préparer_sans_trèfle_échoue_et_laisse_le_stock_intact() -> None:
 # @spec druide.preparation::refuse-ingredient-manquant-au-depart
 def test_préparer_avec_une_fraise_de_moins_échoue_et_laisse_le_stock_intact() -> None:
     stock = GardeManger([fraises(11), trèfles(8)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(RECETTE_DES_FRAIFLES)
@@ -56,7 +59,7 @@ def test_préparer_avec_une_fraise_de_moins_échoue_et_laisse_le_stock_intact() 
 # @spec druide.preparation::sert-le-resultat-de-la-derniere-etape
 def test_préparer_des_fraifles_au_gui_enchaîne_les_étapes() -> None:
     stock = GardeManger([fraises(12), trèfles(8), gui(1)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     plat = druide.préparer(RECETTE_DES_FRAIFLES_AU_GUI)
 
@@ -67,7 +70,7 @@ def test_préparer_des_fraifles_au_gui_enchaîne_les_étapes() -> None:
 # @spec druide.preparation::melange-additionne-les-quantites
 def test_préparer_des_fraifles_au_gui_et_lait_doré_additionne_toutes_les_quantités() -> None:
     stock = GardeManger([fraises(12), trèfles(8), gui(1), lait_de_sanglier(4), curcuma(10)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     plat = druide.préparer(RECETTE_DES_FRAIFLES_AU_GUI_ET_LAIT_DORÉ)
 
@@ -77,7 +80,7 @@ def test_préparer_des_fraifles_au_gui_et_lait_doré_additionne_toutes_les_quant
 # @spec druide.preparation::conserve-le-surplus
 def test_préparer_avec_une_fraise_de_plus_garde_le_surplus_hors_du_plat() -> None:
     stock = GardeManger([fraises(13), trèfles(8)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     plat = druide.préparer(RECETTE_DES_FRAIFLES)
 
@@ -88,7 +91,7 @@ def test_préparer_avec_une_fraise_de_plus_garde_le_surplus_hors_du_plat() -> No
 # @spec druide.preparation::echoue-sans-restitution-en-cours-de-recette
 def test_manquer_de_fraifles_à_la_deuxième_étape_ne_rend_pas_les_ingrédients_consommés() -> None:
     stock = GardeManger([fraises(12), trèfles(8), gui(1)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(RECETTE_DES_FRAIFLES_AU_GUI_PAS_ASSEZ_DE_FRAIFLES)
@@ -99,7 +102,7 @@ def test_manquer_de_fraifles_à_la_deuxième_étape_ne_rend_pas_les_ingrédients
 # @spec druide.preparation::echoue-sans-restitution-en-cours-de-recette
 def test_manquer_de_gui_à_la_deuxième_étape_ne_consomme_pas_les_fraifles_de_cette_étape() -> None:
     stock = GardeManger([fraises(12), trèfles(8), gui(1)])
-    druide = Pythonoramix(stock)
+    druide = Pythonoramix(stock, CuiseurDouble())
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(RECETTE_DES_FRAIFLES_AU_GUI_PAS_ASSEZ_DE_GUI)
@@ -109,7 +112,33 @@ def test_manquer_de_gui_à_la_deuxième_étape_ne_consomme_pas_les_fraifles_de_c
 
 # @spec druide.preparation::recette-sans-etape-echoue
 def test_préparer_une_recette_sans_étape_échoue() -> None:
-    druide = Pythonoramix(GardeManger([]))
+    druide = Pythonoramix(GardeManger([]), CuiseurDouble())
 
     with pytest.raises(IngrédientManquantException):
         druide.préparer(RECETTE_SANS_ÉTAPE)
+
+
+# @spec druide.preparation::ebullition-conserve-la-quantite
+def test_préparer_des_fraises_bouillies_conserve_la_quantité_et_vide_le_cuiseur() -> None:
+    stock = GardeManger([fraises(12)])
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(stock, cuiseur)
+
+    plat = druide.préparer(RECETTE_DES_FRAISES_BOUILLIES)
+
+    assert plat == Plat(nom="fraise bouillie", quantité=12)
+    assert stock.contenu == []
+    assert cuiseur.ingrédient_en_cuisson == INGRÉDIENT_VIDE
+
+
+# @spec druide.preparation::ebullition-conserve-la-quantite
+def test_préparer_des_fraifles_bouillies_enchaîne_mélange_et_ébullition() -> None:
+    stock = GardeManger([fraises(12), trèfles(8)])
+    cuiseur = CuiseurDouble()
+    druide = Pythonoramix(stock, cuiseur)
+
+    plat = druide.préparer(RECETTE_DES_FRAIFLES_BOUILLIES)
+
+    assert plat == Plat(nom="fraifle bouillie", quantité=20)
+    assert stock.contenu == []
+    assert cuiseur.ingrédient_en_cuisson == INGRÉDIENT_VIDE

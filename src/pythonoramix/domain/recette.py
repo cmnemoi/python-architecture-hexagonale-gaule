@@ -4,6 +4,7 @@ from enum import Enum, auto
 
 class Action(Enum):
     MÉLANGER = auto()
+    BOUILLIR = auto()
 
 
 @dataclass(frozen=True)
