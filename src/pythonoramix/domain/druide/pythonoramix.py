@@ -2,13 +2,14 @@ import time
 from collections.abc import Iterable
 
 from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson
+from pythonoramix.domain.druide.druide import Druide
 from pythonoramix.domain.druide.stock import IngrédientManquantException, Stock
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Action, Ingrédient, Plat, Recette, Température, Étape
 
 DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES = 0.05
 
 
-class Pythonoramix:
+class Pythonoramix(Druide):
     def __init__(self, stock: Stock, cuiseur: AppareilDeCuisson) -> None:
         self._stock = stock
         self._cuiseur = cuiseur
