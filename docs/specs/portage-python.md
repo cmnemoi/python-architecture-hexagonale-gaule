@@ -105,6 +105,7 @@ Les ingrédients des étapes précédentes restent consommés.
 | ZOMBIES | Étant donné | Quand | Alors | Origine |
 |---|---|---|---|---|
 | Exceptional, Boundary | 12 fraises, 8 trèfles et 1 gui | le druide prépare les fraifles au gui approximatives | `IngrédientManquantException`, et le stock contient 20 fraifles et 1 gui | Test Java `préparerDesFraiflesAuGuiPasAssezDeFraifles`. État du stock : code Java `mélanger` |
+| Boundary | 12 fraises, 8 trèfles et 1 gui | le druide prépare une recette qui demande 2 gui à l'étape 2 | `IngrédientManquantException`, et le stock contient 20 fraifles et 1 gui | Code Java `mélanger` : la vérification des deux ingrédients précède leur retrait |
 
 ### Règle 6 : le surplus reste dans le stock
 

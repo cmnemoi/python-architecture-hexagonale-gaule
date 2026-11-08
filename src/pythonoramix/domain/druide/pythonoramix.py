@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+
 from pythonoramix.domain.druide.stock import IngrédientManquantException, Stock
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient, Plat, Recette, Étape
 
@@ -8,7 +10,7 @@ class Pythonoramix:
 
     # @spec druide.preparation::sert-le-resultat-de-la-derniere-etape
     def préparer(self, recette_à_préparer: Recette) -> Plat:
-        self._vérifier_disponibilité_ingrédients(recette_à_préparer)
+        self._vérifier_disponibilité(recette_à_préparer.ingrédients)
 
         dernier_ingrédient_obtenu = INGRÉDIENT_VIDE
         for étape in recette_à_préparer.déroulé:
@@ -17,14 +19,15 @@ class Pythonoramix:
         return self._servir(dernier_ingrédient_obtenu)
 
     # @spec druide.preparation::refuse-ingredient-manquant-au-depart
-    def _vérifier_disponibilité_ingrédients(self, recette_à_préparer: Recette) -> None:
-        if not all(self._stock.vérifier_disponibilité(ingrédient) for ingrédient in recette_à_préparer.ingrédients):
+    def _vérifier_disponibilité(self, ingrédients: Iterable[Ingrédient]) -> None:
+        if not all(self._stock.vérifier_disponibilité(ingrédient) for ingrédient in ingrédients):
             raise IngrédientManquantException()
 
     # @spec druide.preparation::melange-additionne-les-quantites
     def _mélanger(self, étape: Étape) -> Ingrédient:
         if étape.avec is None:
             raise ValueError("Une étape de mélange doit avoir un ingrédient associé.")
+        self._vérifier_disponibilité((étape.base, étape.avec))
         ingrédient_de_base = self._récupérer(étape.base)
         ingrédient_avec = self._récupérer(étape.avec)
         return Ingrédient(
