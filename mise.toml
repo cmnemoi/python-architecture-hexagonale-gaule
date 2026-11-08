@@ -40,10 +40,6 @@ run = "uv run pytest tests/domain"
 description = "Lance les tests de l'API"
 run = "uv run pytest tests/apix"
 
-[tasks."test:adaptateurs"]
-description = "Lance les tests des adaptateurs"
-run = "uv run pytest tests/adapters"
-
 [tasks."test:infrastructure"]
 description = "Lance les tests de l'infrastructure"
 run = "uv run pytest tests/infrastructure"

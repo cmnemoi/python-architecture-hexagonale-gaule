@@ -10,8 +10,7 @@ Le kata reprend [Javanoramix](https://github.com/ambreperson/java-architecture-h
 src/pythonoramix/
 ├── domain/           Le cœur métier et ses ports, sans dépendance externe
 ├── apix/             L'API REST, qui appelle le port Druide
-├── adapters/         Les adaptateurs, qui traduisent entre les ports et l'infrastructure
-├── infrastructure/   Le garde-manger et le Thermomix, qui ignorent le domaine
+├── infrastructure/   Le garde-manger et le Thermomix en mémoire, qui implémentent les ports
 ├── config.py         L'assemblage de l'application
 └── main.py           Le point d'entrée
 ```
@@ -47,7 +46,6 @@ La première requête sert la potion magique après 2,7 s de préchauffage. La r
 | `mise run test:rapide` | Lance les tests sans attente réelle du préchauffage |
 | `mise run test:domaine` | Lance les tests du domaine |
 | `mise run test:api` | Lance les tests de l'API |
-| `mise run test:adaptateurs` | Lance les tests des adaptateurs |
 | `mise run test:infrastructure` | Lance les tests de l'infrastructure |
 | `mise run test:architecture` | Lance les tests d'architecture |
 | `mise run lint` | Vérifie le style du code |

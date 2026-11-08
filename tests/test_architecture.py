@@ -10,7 +10,6 @@ from pytestarch import EvaluableArchitecture, Rule, get_evaluable_architecture
     "module_interdit",
     [
         "src.pythonoramix.infrastructure",
-        "src.pythonoramix.adapters",
         "src.pythonoramix.apix",
         "src.pythonoramix.config",
         "fastapi",
@@ -27,7 +26,6 @@ def test_le_domaine_n_importe_ni_l_extérieur_ni_fastapi(
     "module_interdit",
     [
         "src.pythonoramix.infrastructure",
-        "src.pythonoramix.adapters",
         "src.pythonoramix.config",
     ],
 )
@@ -35,7 +33,7 @@ def test_l_api_dépend_uniquement_du_domaine(architecture: EvaluableArchitecture
     _vérifier_l_interdiction(architecture, "src.pythonoramix.apix", module_interdit)
 
 
-# @spec architecture::adaptateurs-relient-domaine-et-infrastructure
+# @spec architecture::infrastructure-implemente-les-ports
 @pytest.mark.parametrize(
     "module_interdit",
     [
@@ -44,24 +42,7 @@ def test_l_api_dépend_uniquement_du_domaine(architecture: EvaluableArchitecture
         "fastapi",
     ],
 )
-def test_les_adaptateurs_relient_uniquement_domaine_et_infrastructure(
-    architecture: EvaluableArchitecture, module_interdit: str
-) -> None:
-    _vérifier_l_interdiction(architecture, "src.pythonoramix.adapters", module_interdit)
-
-
-# @spec architecture::infrastructure-ignore-le-domaine
-@pytest.mark.parametrize(
-    "module_interdit",
-    [
-        "src.pythonoramix.domain",
-        "src.pythonoramix.adapters",
-        "src.pythonoramix.apix",
-        "src.pythonoramix.config",
-        "fastapi",
-    ],
-)
-def test_l_infrastructure_ignore_le_reste_de_l_application(
+def test_l_infrastructure_dépend_uniquement_du_domaine(
     architecture: EvaluableArchitecture, module_interdit: str
 ) -> None:
     _vérifier_l_interdiction(architecture, "src.pythonoramix.infrastructure", module_interdit)
