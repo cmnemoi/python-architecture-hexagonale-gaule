@@ -10,8 +10,8 @@ Le kata reprend [Javanoramix](https://github.com/ambreperson/java-architecture-h
 src/pythonoramix/
 ├── domain/           Le cœur métier et ses ports, sans dépendance externe
 ├── apix/             L'API REST, qui appelle le port Druide
-├── adapters/         Les adaptateurs, qui relient les ports à l'infrastructure
-├── infrastructure/   Le garde-manger et le Thermomix
+├── adapters/         Les adaptateurs, qui traduisent entre les ports et l'infrastructure
+├── infrastructure/   Le garde-manger et le Thermomix, qui ignorent le domaine
 ├── config.py         L'assemblage de l'application
 └── main.py           Le point d'entrée
 ```
