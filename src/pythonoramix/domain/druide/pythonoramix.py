@@ -8,11 +8,18 @@ class Pythonoramix:
 
     # @spec druide.preparation::sert-le-resultat-de-la-derniere-etape
     def préparer(self, recette_à_préparer: Recette) -> Plat:
+        self._vérifier_disponibilité_ingrédients(recette_à_préparer)
+
         dernier_ingrédient_obtenu = INGRÉDIENT_VIDE
         for étape in recette_à_préparer.déroulé:
             dernier_ingrédient_obtenu = self._mélanger(étape)
             self._stock.stocker_ingrédient(dernier_ingrédient_obtenu)
         return self._servir(dernier_ingrédient_obtenu)
+
+    # @spec druide.preparation::refuse-ingredient-manquant-au-depart
+    def _vérifier_disponibilité_ingrédients(self, recette_à_préparer: Recette) -> None:
+        if not all(self._stock.vérifier_disponibilité(ingrédient) for ingrédient in recette_à_préparer.ingrédients):
+            raise IngrédientManquantException()
 
     # @spec druide.preparation::melange-additionne-les-quantites
     def _mélanger(self, étape: Étape) -> Ingrédient:

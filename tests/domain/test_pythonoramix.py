@@ -1,4 +1,7 @@
+import pytest
+
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
+from pythonoramix.domain.druide.stock import IngrédientManquantException
 from pythonoramix.domain.recette import Plat
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from tests.domain.recettes import RECETTE_DES_FRAIFLES, fraises, trèfles
@@ -13,3 +16,25 @@ def test_préparer_des_fraifles_sert_le_résultat_et_vide_le_stock() -> None:
 
     assert plat == Plat(nom="fraifle", quantité=20)
     assert stock.contenu == []
+
+
+# @spec druide.preparation::refuse-ingredient-manquant-au-depart
+def test_préparer_sans_trèfle_échoue_et_laisse_le_stock_intact() -> None:
+    stock = GardeManger([fraises(12)])
+    druide = Pythonoramix(stock)
+
+    with pytest.raises(IngrédientManquantException):
+        druide.préparer(RECETTE_DES_FRAIFLES)
+
+    assert stock.contenu == [fraises(12)]
+
+
+# @spec druide.preparation::refuse-ingredient-manquant-au-depart
+def test_préparer_avec_une_fraise_de_moins_échoue_et_laisse_le_stock_intact() -> None:
+    stock = GardeManger([fraises(11), trèfles(8)])
+    druide = Pythonoramix(stock)
+
+    with pytest.raises(IngrédientManquantException):
+        druide.préparer(RECETTE_DES_FRAIFLES)
+
+    assert stock.contenu == [fraises(11), trèfles(8)]
