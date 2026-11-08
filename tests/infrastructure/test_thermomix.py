@@ -4,7 +4,7 @@ import pytest
 
 from pythonoramix.domain.druide.cuiseur import CuiseurNonPréchaufféException
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient, Température
-from pythonoramix.infrastructure.thermomix_en_memoire import Thermomix
+from pythonoramix.infrastructure.thermomix import Thermomix
 
 
 # @spec cuiseur.thermomix::chauffe-progressivement

@@ -5,7 +5,7 @@ from pythonoramix.domain.druide.cuiseur import AppareilDeCuisson
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import Stock
 from pythonoramix.domain.recette import RECETTE_DE_LA_POTION_MAGIQUE, Ingrédient
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
+from pythonoramix.infrastructure.garde_manger import GardeManger
 
 
 def créer_l_application(stock: Stock, cuiseur: AppareilDeCuisson) -> FastAPI:

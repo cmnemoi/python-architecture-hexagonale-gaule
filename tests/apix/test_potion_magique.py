@@ -3,8 +3,8 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 
 from pythonoramix.config import POISSONS_FRAIS, créer_l_application, créer_le_garde_manger
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
-from pythonoramix.infrastructure.thermomix_en_memoire import Thermomix
+from pythonoramix.infrastructure.garde_manger import GardeManger
+from pythonoramix.infrastructure.thermomix import Thermomix
 from pythonoramix.main import application
 
 

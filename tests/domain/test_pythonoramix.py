@@ -3,7 +3,7 @@ import pytest
 from pythonoramix.domain.druide.pythonoramix import Pythonoramix
 from pythonoramix.domain.druide.stock import IngrédientManquantException
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, RECETTE_DE_LA_POTION_MAGIQUE, Plat, Température
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
+from pythonoramix.infrastructure.garde_manger import GardeManger
 from tests.domain.cuiseur_double import CuiseurDouble
 from tests.domain.recettes import (
     curcuma,

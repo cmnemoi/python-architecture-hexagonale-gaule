@@ -1,5 +1,5 @@
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient
-from pythonoramix.infrastructure.garde_manger_en_memoire import GardeManger
+from pythonoramix.infrastructure.garde_manger import GardeManger
 
 
 # @spec infrastructure::garde-manger-respecte-le-stock
