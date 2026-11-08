@@ -2,29 +2,12 @@ from dataclasses import dataclass
 from enum import Enum, auto
 
 
-class Action(Enum):
-    MÉLANGER = auto()
-    BOUILLIR = auto()
-
-
 @dataclass(frozen=True)
-class Ingrédient:
+class Recette:
     nom: str
-    quantité: int
-
-
-INGRÉDIENT_VIDE = Ingrédient(nom="", quantité=0)
-
-
-@dataclass(frozen=True)
-class Plat:
-    nom: str
-    quantité: int
-
-
-@dataclass(frozen=True)
-class Température:
-    degré: int
+    ingrédients: tuple[Ingrédient, ...]
+    préchauffage: Température | None
+    déroulé: tuple[Étape, ...]
 
 
 @dataclass(frozen=True)
@@ -36,37 +19,53 @@ class Étape:
     nom_ingrédient_obtenu: str
 
 
+class Action(Enum):
+    MÉLANGER = auto()
+    BOUILLIR = auto()
+
+
 @dataclass(frozen=True)
-class Recette:
+class Ingrédient:
     nom: str
-    ingrédients: tuple[Ingrédient, ...]
-    préchauffage: Température | None
-    déroulé: tuple[Étape, ...]
+    quantité: int
 
 
-_TRÈFLES = Ingrédient(nom="trèfle à 4 feuilles", quantité=8)
-_FRAISES = Ingrédient(nom="fraise", quantité=12)
-_LAIT_DE_SANGLIER = Ingrédient(nom="once de lait de sanglier", quantité=4)
-_CURCUMA = Ingrédient(nom="pincée de curcuma", quantité=10)
-_GUI = Ingrédient(nom="feuille de gui coupée à la serpe d'or", quantité=1)
+@dataclass(frozen=True)
+class Température:
+    degré: int
+
+
+@dataclass(frozen=True)
+class Plat:
+    nom: str
+    quantité: int
+
+
+INGRÉDIENT_VIDE = Ingrédient(nom="", quantité=0)
 
 # @spec recette::potion-magique
 RECETTE_DE_LA_POTION_MAGIQUE = Recette(
     nom="Recette de la potion magique",
-    ingrédients=(_TRÈFLES, _FRAISES, _LAIT_DE_SANGLIER, _CURCUMA, _GUI),
+    ingrédients=(
+        Ingrédient(nom="trèfle à 4 feuilles", quantité=8),
+        Ingrédient(nom="fraise", quantité=12),
+        Ingrédient(nom="once de lait de sanglier", quantité=4),
+        Ingrédient(nom="pincée de curcuma", quantité=10),
+        Ingrédient(nom="feuille de gui coupée à la serpe d'or", quantité=1),
+    ),
     préchauffage=Température(degré=90),
     déroulé=(
         Étape(
             nom="Mélanger les trèfles et les fraises",
-            base=_TRÈFLES,
-            avec=_FRAISES,
+            base=Ingrédient(nom="trèfle à 4 feuilles", quantité=8),
+            avec=Ingrédient(nom="fraise", quantité=12),
             action=Action.MÉLANGER,
             nom_ingrédient_obtenu="fraifle",
         ),
         Étape(
             nom="Préparer le lait doré",
-            base=_LAIT_DE_SANGLIER,
-            avec=_CURCUMA,
+            base=Ingrédient(nom="once de lait de sanglier", quantité=4),
+            avec=Ingrédient(nom="pincée de curcuma", quantité=10),
             action=Action.MÉLANGER,
             nom_ingrédient_obtenu="lait doré",
         ),
@@ -80,7 +79,7 @@ RECETTE_DE_LA_POTION_MAGIQUE = Recette(
         Étape(
             nom="Ajouter le gui",
             base=Ingrédient(nom="fraifle bouillie", quantité=20),
-            avec=_GUI,
+            avec=Ingrédient(nom="feuille de gui coupée à la serpe d'or", quantité=1),
             action=Action.MÉLANGER,
             nom_ingrédient_obtenu="fraifle au gui",
         ),

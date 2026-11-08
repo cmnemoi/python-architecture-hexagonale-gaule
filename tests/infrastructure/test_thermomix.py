@@ -6,15 +6,6 @@ from pythonoramix.domain.druide.cuiseur import CuiseurNonPréchaufféException
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient, Température
 from pythonoramix.infrastructure.thermomix import Thermomix
 
-_90_DEGRÉS = Température(degré=90)
-_FRAISES = Ingrédient(nom="fraise", quantité=12)
-_FRAISES_BOUILLIES = Ingrédient(nom="fraise bouillie", quantité=12)
-
-
-def _attendre_la_température(thermomix: Thermomix, température: Température) -> None:
-    while thermomix.vérifier_température() != température:
-        time.sleep(0.01)
-
 
 # @spec cuiseur.thermomix::chauffe-progressivement
 def test_préchauffer_rend_la_main_avant_d_atteindre_la_température() -> None:
@@ -56,3 +47,13 @@ def test_prélever_après_cuisson_sort_le_résultat_puis_laisse_le_cuiseur_vide(
 
     assert thermomix.prélever() == _FRAISES_BOUILLIES
     assert thermomix.prélever() == INGRÉDIENT_VIDE
+
+
+def _attendre_la_température(thermomix: Thermomix, température: Température) -> None:
+    while thermomix.vérifier_température() != température:
+        time.sleep(0.01)
+
+
+_90_DEGRÉS = Température(degré=90)
+_FRAISES = Ingrédient(nom="fraise", quantité=12)
+_FRAISES_BOUILLIES = Ingrédient(nom="fraise bouillie", quantité=12)

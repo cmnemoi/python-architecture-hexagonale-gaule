@@ -4,12 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 from pythonoramix.domain.druide.cuiseur import CuiseurNonPréchaufféException
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Ingrédient, Température
 
-DEGRÉS_PAR_PALIER = 10
-DURÉE_D_UN_PALIER_EN_SECONDES = 0.3
-
 
 class Thermomix:
-    def __init__(self, durée_d_un_palier_en_secondes: float = DURÉE_D_UN_PALIER_EN_SECONDES) -> None:
+    def __init__(self, durée_d_un_palier_en_secondes: float = 0.3) -> None:
         self._durée_d_un_palier_en_secondes = durée_d_un_palier_en_secondes
         self._ingrédient_en_cuisson = INGRÉDIENT_VIDE
         self._température_actuelle = Température(degré=0)
@@ -39,3 +36,6 @@ class Thermomix:
         while self._température_actuelle.degré < température.degré:
             time.sleep(self._durée_d_un_palier_en_secondes)
             self._température_actuelle = Température(degré=self._température_actuelle.degré + DEGRÉS_PAR_PALIER)
+
+
+DEGRÉS_PAR_PALIER = 10

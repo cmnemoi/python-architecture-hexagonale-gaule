@@ -8,10 +8,6 @@ from pythonoramix.infrastructure.thermomix import Thermomix
 from pythonoramix.main import application
 
 
-def _créer_le_client(garde_manger: GardeManger) -> TestClient:
-    return TestClient(créer_l_application(garde_manger, Thermomix(durée_d_un_palier_en_secondes=0.001)))
-
-
 # @spec api::prepare-la-potion-magique
 def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
     client = _créer_le_client(créer_le_garde_manger())
@@ -49,3 +45,7 @@ def test_l_application_de_production_est_câblée_avec_le_vrai_thermomix() -> No
     réponse = TestClient(application).post("/potion-magique")
 
     assert réponse.status_code == HTTPStatus.OK
+
+
+def _créer_le_client(garde_manger: GardeManger) -> TestClient:
+    return TestClient(créer_l_application(garde_manger, Thermomix(durée_d_un_palier_en_secondes=0.001)))

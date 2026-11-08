@@ -8,7 +8,12 @@ from pythonoramix.domain.recette import RECETTE_DE_LA_POTION_MAGIQUE, Ingrédien
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from pythonoramix.infrastructure.thermomix import Thermomix
 
-POISSONS_FRAIS = Ingrédient(nom="poisson frais arrivant de Lutèce par char à bœufs", quantité=100)
+
+def créer_l_application(garde_manger: GardeManger, thermomix: Thermomix) -> FastAPI:
+    druide = Pythonoramix(garde_manger_adapté.GardeManger(garde_manger), thermomix_adapté.Thermomix(thermomix))
+    application = FastAPI(title="Pythonoramix")
+    application.include_router(créer_le_routeur_de_la_potion_magique(druide))
+    return application
 
 
 # @spec api::une-seule-potion-par-demarrage
@@ -16,8 +21,4 @@ def créer_le_garde_manger() -> GardeManger:
     return GardeManger([POISSONS_FRAIS, *RECETTE_DE_LA_POTION_MAGIQUE.ingrédients])
 
 
-def créer_l_application(garde_manger: GardeManger, thermomix: Thermomix) -> FastAPI:
-    druide = Pythonoramix(garde_manger_adapté.GardeManger(garde_manger), thermomix_adapté.Thermomix(thermomix))
-    application = FastAPI(title="Pythonoramix")
-    application.include_router(créer_le_routeur_de_la_potion_magique(druide))
-    return application
+POISSONS_FRAIS = Ingrédient(nom="poisson frais arrivant de Lutèce par char à bœufs", quantité=100)

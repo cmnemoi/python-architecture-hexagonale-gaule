@@ -6,8 +6,6 @@ from pythonoramix.domain.druide.druide import Druide
 from pythonoramix.domain.druide.stock import IngrédientManquantException, Stock
 from pythonoramix.domain.recette import INGRÉDIENT_VIDE, Action, Ingrédient, Plat, Recette, Température, Étape
 
-DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES = 0.05
-
 
 class Pythonoramix(Druide):
     def __init__(self, stock: Stock, cuiseur: AppareilDeCuisson) -> None:
@@ -69,3 +67,6 @@ class Pythonoramix(Druide):
         if ingrédient_récupéré is None:
             raise IngrédientManquantException()
         return ingrédient_récupéré
+
+
+DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES = 0.05
