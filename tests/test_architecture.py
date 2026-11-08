@@ -50,6 +50,23 @@ def test_les_adaptateurs_relient_uniquement_domaine_et_infrastructure(
     _vérifier_l_interdiction(architecture, "src.pythonoramix.adapters", module_interdit)
 
 
+# @spec architecture::infrastructure-ignore-le-domaine
+@pytest.mark.parametrize(
+    "module_interdit",
+    [
+        "src.pythonoramix.domain",
+        "src.pythonoramix.adapters",
+        "src.pythonoramix.apix",
+        "src.pythonoramix.config",
+        "fastapi",
+    ],
+)
+def test_l_infrastructure_ignore_le_reste_de_l_application(
+    architecture: EvaluableArchitecture, module_interdit: str
+) -> None:
+    _vérifier_l_interdiction(architecture, "src.pythonoramix.infrastructure", module_interdit)
+
+
 @pytest.fixture(scope="module")
 def architecture() -> EvaluableArchitecture:
     sources = Path(__file__).parent.parent / "src"
