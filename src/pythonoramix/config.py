@@ -18,7 +18,8 @@ def créer_l_application(garde_manger: GardeManger, thermomix: Thermomix) -> Fas
 
 # @spec api::une-seule-potion-par-demarrage
 def créer_le_garde_manger() -> GardeManger:
-    return GardeManger([POISSONS_FRAIS, *RECETTE_DE_LA_POTION_MAGIQUE.ingrédients])
+    ingrédients = (POISSONS_FRAIS, *RECETTE_DE_LA_POTION_MAGIQUE.ingrédients)
+    return GardeManger({ingrédient.nom: ingrédient.quantité for ingrédient in ingrédients})
 
 
 POISSONS_FRAIS = Ingrédient(nom="poisson frais arrivant de Lutèce par char à bœufs", quantité=100)

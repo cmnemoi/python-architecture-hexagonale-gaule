@@ -20,7 +20,7 @@ def test_un_serveur_qui_démarre_sert_la_potion_magique_en_json() -> None:
 
 # @spec api::ingredient-manquant-donne-409
 def test_un_garde_manger_vide_donne_une_erreur_409_avec_le_motif() -> None:
-    client = _créer_le_client(GardeManger([]))
+    client = _créer_le_client(GardeManger({}))
 
     réponse = client.post("/potion-magique")
 
@@ -37,7 +37,7 @@ def test_une_seconde_potion_donne_une_erreur_409_et_laisse_les_poissons() -> Non
     réponse = client.post("/potion-magique")
 
     assert réponse.status_code == HTTPStatus.CONFLICT
-    assert garde_manger.contenu == [POISSONS_FRAIS]
+    assert garde_manger.contenu == {POISSONS_FRAIS.nom: POISSONS_FRAIS.quantité}
 
 
 # @spec api::prepare-la-potion-magique
