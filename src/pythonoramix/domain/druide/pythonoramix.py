@@ -41,6 +41,7 @@ class Pythonoramix(Druide):
             time.sleep(DÉLAI_ENTRE_DEUX_VÉRIFICATIONS_EN_SECONDES)
 
     # @spec druide.preparation::melange-additionne-les-quantites
+    # @spec druide.preparation::echoue-sans-restitution-en-cours-de-recette
     def _mélanger(self, étape: Étape) -> Ingrédient:
         if étape.avec is None:
             raise ValueError("Une étape de mélange doit avoir un ingrédient associé.")
@@ -58,6 +59,7 @@ class Pythonoramix(Druide):
         self._cuiseur.cuire(ingrédient_de_base, étape.nom_ingrédient_obtenu)
         return self._cuiseur.prélever()
 
+    # @spec druide.preparation::recette-sans-etape-echoue
     def _servir(self, ingrédient: Ingrédient) -> Plat:
         ingrédient_à_servir = self._récupérer(ingrédient)
         return Plat(nom=ingrédient_à_servir.nom, quantité=ingrédient_à_servir.quantité)

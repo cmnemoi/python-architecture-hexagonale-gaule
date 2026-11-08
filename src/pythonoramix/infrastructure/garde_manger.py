@@ -11,6 +11,7 @@ class GardeManger:
     def stocker_ingrédient(self, ingrédient: Ingrédient) -> None:
         self.contenu.append(ingrédient)
 
+    # @spec druide.preparation::conserve-le-surplus
     def récupérer_ingrédient(self, ingrédient_recherché: Ingrédient) -> Ingrédient | None:
         ingrédient_en_stock = self._trouver_en_quantité_suffisante(ingrédient_recherché)
         if ingrédient_en_stock is None:
