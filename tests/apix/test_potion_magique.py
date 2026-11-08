@@ -1,11 +1,12 @@
+import importlib
 from http import HTTPStatus
 
 from fastapi.testclient import TestClient
 
+from pythonoramix import main
 from pythonoramix.config import POISSONS_FRAIS, créer_l_application, créer_le_garde_manger
 from pythonoramix.infrastructure.garde_manger import GardeManger
 from pythonoramix.infrastructure.thermomix import Thermomix
-from pythonoramix.main import application
 
 
 # @spec api::prepare-la-potion-magique
@@ -42,7 +43,9 @@ def test_une_seconde_potion_donne_une_erreur_409_et_laisse_les_poissons() -> Non
 
 # @spec api::prepare-la-potion-magique
 def test_l_application_de_production_est_câblée_avec_le_vrai_thermomix() -> None:
-    réponse = TestClient(application).post("/potion-magique")
+    application_neuve = importlib.reload(main).application
+
+    réponse = TestClient(application_neuve).post("/potion-magique")
 
     assert réponse.status_code == HTTPStatus.OK
 
